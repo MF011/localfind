@@ -1,0 +1,16 @@
+{
+  "application": {
+    "file": "localfind.exe",
+    "size_bytes": 26047602,
+    "sha256": "ee6a516912b4bba1110a9ece04cd7124e5c72b2ef8df800bb13b6922a082c570",
+    "machine": "0x8664",
+    "authenticode_certificate_bytes": 0
+  },
+  "installer": {
+    "file": "Локальный поиск_0.1.0_x64-setup.exe",
+    "size_bytes": 5299197,
+    "sha256": "60783beae49bfc68f980244ed82eb2f9180f7a74be70972a7fab3705c0db0347",
+    "machine": "0x14c",
+    "authenticode_certificate_bytes": 0
+  }
+}

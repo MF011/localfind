@@ -1005,8 +1005,9 @@ function App() {
                 <details>
                   <summary>Компоненты распознавания</summary>
                   <p className="muted small">
-                    Для сборки из исходников нужны Python и Tesseract с языками
-                    rus, eng и osd. Приложение не скачивает их автоматически.
+                    Для обработки документов нужен Python, для OCR — Tesseract с
+                    языками rus, eng и osd. Приложение не скачивает их
+                    автоматически.
                   </p>
                   <label className="stack">
                     Путь к Tesseract

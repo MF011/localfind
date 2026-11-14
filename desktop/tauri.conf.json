@@ -27,7 +27,7 @@
     "active": true,
     "targets": ["nsis"],
     "resources": {
-      "../workers/": "workers/"
+      "../workers/extract.py": "workers/extract.py"
     },
     "windows": {
       "nsis": {

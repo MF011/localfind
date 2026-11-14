@@ -26,7 +26,8 @@ PDFium через pypdfium2 5.13.0, Pillow 13.0.0, Tesseract 5.5.0.
 - TypeScript/Vite production build; Rust clippy с `-D warnings`.
 - `cargo check -p localfind --target x86_64-pc-windows-gnu` с MinGW:
   типизация и компиляция Windows-кода прошли, включая Tauri IPC и Job Object.
-  Это не создание/запуск подписанного установщика и не проверка Windows GUI.
+  Затем успешно собраны release Windows x64 .exe и испытательный NSIS 3.11.
+  Это не проверка запуска Windows GUI или установки.
 
 ## Поиск и индекс
 
@@ -73,9 +74,21 @@ Tesseract распознал 4 небольших синтетических и�
 | A | Индекс, поиск, настройки и действия подключены; ядро проверено в Linux | Реальные диски/Explorer/длинные пути/приоритеты на Windows |
 | B | Извлечение форматов, фразы, ссылки, безопасный текстовый просмотр | Более широкий корпус сложных Office/PDF; ограничения FORMATS.md |
 | C | OCR, очередь, кэш, поворот, ограничения и отмена | Фотографии реального качества, runtime-проверка Windows Job Object |
-| D | Тесты, измерения, рецепт NSIS и ручной Windows workflow | Автономная упаковка Python/Tesseract, Windows acceptance, полный license audit, подпись |
+| D | Тесты, измерения, Windows .exe/NSIS, ручной Windows workflow | Автономная упаковка Python/Tesseract, Windows acceptance, полный license audit, подпись |
 
 Не проверены: GUI на Windows, повышение DPI, экранный диктор, права NTFS,
 реальные OneDrive placeholders/USB/UNC, жёсткие сбои ОС и повреждение SQLite.
 При повреждении базы нет автоматического salvage; требуется сохранение копии
 и ручное пересоздание индекса. Проект не обозначен production-ready.
+
+## Проверка состава Windows-сборки
+
+Собран `localfind.exe` PE x64, 26 047 602 байт. Испытательный NSIS —
+5 299 197 байт (5,05 МиБ), содержит x64 приложение, WebView2Loader.dll
+и единственный worker-скрипт. Служебные .pyc/requirements исключены.
+NSIS использует стандартный 32-битный bootstrapper для установки x64 payload.
+Архивная проверка 7-Zip завершилась `Everything is Ok`; это не запуск установщика.
+Таблица сертификатов Authenticode пуста у приложения и установщика: подписи нет.
+Хеши и размеры — `results/windows-build.json`. Непроверенный установщик оставлен
+локальным результатом сборки, не обозначен релизом и не опубликован.
+Python/Tesseract/языки не входят в этот испытательный пакет.
