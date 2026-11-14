@@ -1,0 +1,24 @@
+name: Windows validation
+on: [workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: python -m pip install -r workers/requirements.txt reportlab
+      - run: cargo test -p localfind-core --locked
+      - run: python -m unittest discover -s tests -v
+      - run: npm ci
+      - run: npm run build
+      - run: npm run bundle
+      # No publication or artifact upload: releases require separate authorization.

@@ -1,0 +1,8 @@
+{
+  "benchmark": "100000 metadata rows and 10000 text blocks",
+  "wall_seconds": 16.582043195000097,
+  "cpu_user_seconds": 12.771374999999999,
+  "cpu_system_seconds": 2.49244,
+  "peak_rss_kib": 9088,
+  "stdout": "names: p50_ms=0.79, p95_ms=12.76, samples=90\ndocuments: p50_ms=83.25, p95_ms=149.52, samples=90\nsynthetic_insert_seconds=9.04, files_per_second=11064, db_bytes=141602240\n"
+}

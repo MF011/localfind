@@ -1,0 +1,30 @@
+[
+  {
+    "sample": "ru_clean",
+    "seconds": 1.448,
+    "cer": 0.178,
+    "expected": "Договор поставки AB-102\nПолучатель: отдел закупок\nДата: 14 ноября 2026 года\nКоличество: 125 единиц\nСумма: 42000 рублей",
+    "actual": "договор\nоставки\nAB-1O2\nолучатель\nотдел\nзакупок\nДata:\nА\ndовон\n2о26\nгода\nоличество\n125\nединиц\nСymma:\n42000\nрублей"
+  },
+  {
+    "sample": "en_clean",
+    "seconds": 0.562,
+    "cer": 0.1197,
+    "expected": "INVOICE AB-102\nCustomer: Procurement department\nDate: 14 November 2026\nQuantity: 125 units\nTotal amount: 42000 rubles",
+    "actual": "NNOICE\nAB-102\nCustomer.\nProcuremen\ndepartment\nDate.\nNovember\n2о26\nQuantity.\n125\nunits\nTota\namount\n42оо0\nrubles"
+  },
+  {
+    "sample": "mixed_blur",
+    "seconds": 1.025,
+    "cer": 0.3853,
+    "expected": "Договор AB-102 / Invoice\nАртикул: RU-550-XL\nProduct code: 987654321\nПоставка: 14.11.2026\nReference: TEST-2048",
+    "actual": "AB-102\nInvoiсe\nдоговор\nAртикул\nRu-55u-xL\nProduct\nCode.\nзђб5азј\nocTabKa:\n14.11.2026\nReference.\nTES-2O48"
+  },
+  {
+    "sample": "ru_rotated",
+    "seconds": 0.546,
+    "cer": 0.678,
+    "expected": "Договор поставки AB-102\nПолучатель: отдел закупок\nДата: 14 ноября 2026 года\nКоличество: 125 единиц\nСумма: 42000 рублей",
+    "actual": "закупок\nгода\nAB-102\nединиц\n2о26\nрублей\nотдел\nоставки\nдовон\n125\n420о\nолучатель:\nКоличествO:\nДоговор\nСумма:\nДaтa!"
+  }
+]
