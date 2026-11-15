@@ -215,31 +215,17 @@ pub fn search(c: &Connection, q: &Query) -> Result<Vec<Hit>> {
     };
     let mut hits = Vec::new();
     if q.mode != "text" {
-        let broad = needle.chars().count() < 3
-            || c.query_row(
-                "SELECT count(*) FROM (SELECT rowid FROM names WHERE names MATCH ? LIMIT 1001)",
-                [&trigram],
-                |r| r.get::<_, i64>(0),
-            )? > 1000;
-        if broad {
-            // Ordered B-tree scans stop as soon as the result window is full.
-            // Exact, name-substring and path-only phases are disjoint.
-            for predicate in [
-                "f.norm_name=:needle",
-                "f.norm_name!=:needle AND instr(f.norm_name,:needle)>0",
-                "instr(f.norm_name,:needle)=0 AND instr(f.norm_path,:needle)>0",
-            ] {
-                let limit = 200 - hits.len();
-                if limit == 0 {
-                    break;
-                }
-                let sql=format!("SELECT f.id,f.name,f.path,f.size,f.modified,CASE WHEN instr(f.norm_name,:needle)>0 THEN 'name' ELSE 'path' END,'',f.path,r.online FROM files f INDEXED BY file_name_order JOIN roots r ON r.id=f.root_id WHERE {predicate} AND {filter} ORDER BY f.norm_name,f.path LIMIT {limit}");
-                hits.extend(run(&sql)?);
-            }
+        // Rank before LIMIT: otherwise a large collection can hide the best matches.
+        let stem="CASE WHEN f.ext!='' THEN substr(f.norm_name,1,length(f.norm_name)-length(f.ext)-1) ELSE f.norm_name END";
+        let boundary="instr(' '||replace(replace(replace(replace(f.norm_name,'.',' '),'-',' '),'_',' '),'(',' '),' '||:needle||' ')>0";
+        let rank=format!("CASE WHEN f.norm_name=:needle THEN 0 WHEN ({stem})=:needle THEN 1 WHEN substr(f.norm_name,1,length(:needle))=:needle THEN 2 WHEN {boundary} THEN 3 WHEN instr(f.norm_name,:needle)>0 THEN 4 ELSE 5 END");
+        let candidate = if needle.chars().count() >= 3 {
+            "f.id IN (SELECT rowid FROM names WHERE names MATCH :trigram)"
         } else {
-            let sql=format!("SELECT f.id,f.name,f.path,f.size,f.modified,CASE WHEN instr(f.norm_name,:needle)>0 THEN 'name' ELSE 'path' END,'',f.path,r.online FROM names JOIN files f ON f.id=names.rowid JOIN roots r ON r.id=f.root_id WHERE names MATCH :trigram AND {filter} ORDER BY CASE WHEN f.norm_name=:needle THEN 0 WHEN instr(f.norm_name,:needle)>0 THEN 1 ELSE 2 END,f.norm_name,f.path LIMIT 200");
-            hits = run(&sql)?;
-        }
+            "instr(f.norm_path,:needle)>0"
+        };
+        let sql=format!("SELECT f.id,f.name,f.path,f.size,f.modified,CASE WHEN instr(f.norm_name,:needle)>0 THEN 'name' ELSE 'path' END,'',f.path,r.online FROM files f JOIN roots r ON r.id=f.root_id WHERE {candidate} AND {filter} ORDER BY {rank},length(f.norm_name),f.norm_name,f.path LIMIT 200");
+        hits = run(&sql)?;
     }
     if q.mode != "names"
         && hits.len() < 200

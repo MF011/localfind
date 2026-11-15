@@ -218,3 +218,27 @@ fn all_disks_discovers_new_roots_and_merges_without_losing_content() {
     scan::discover_drives(&e, vec![other.to_string_lossy().into_owned()]).unwrap();
     assert!(db::roots(&c).unwrap().is_empty());
 }
+
+#[test]
+fn relevance_orders_numeric_names_before_incidental_matches() {
+    let (_d, e, r) = setup();
+    for name in [
+        "a12000.txt",
+        "документ 200.txt",
+        "200 отчёт.txt",
+        "200.pdf",
+        "200.txt",
+    ] {
+        fs::write(r.join(name), "fixture").unwrap();
+    }
+    // More than the result limit must not displace the strongest match.
+    for i in 0..250 {
+        fs::write(r.join(format!("aaa{i}2000.txt")), "fixture").unwrap();
+    }
+    scan::scan(&e).unwrap();
+    let hits = find(&e, "200");
+    assert_eq!(hits[0].name, "200.pdf");
+    assert_eq!(hits[1].name, "200.txt");
+    assert_eq!(hits[2].name, "200 отчёт.txt");
+    assert_eq!(hits[3].name, "документ 200.txt");
+}
