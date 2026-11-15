@@ -1,0 +1,11 @@
+# Установщик Windows x64
+
+Скачать: [localfind-0.1.0-preview.1-windows-x64-setup.exe](https://github.com/MF011/localfind/raw/refs/heads/main/installer/localfind-0.1.0-preview.1-windows-x64-setup.exe)
+
+Предварительная сборка 0.1.0. Цифровой подписи нет. Сборка выполнена в Linux; запуск и установка на Windows ещё не проверены.
+
+Установщик содержит приложение, WebView2Loader.dll и обработчик документов. Для интерфейса нужен Microsoft Edge WebView2 Runtime.
+
+Для извлечения содержимого нужен Python 3.12 с pypdfium2==5.13.0 и Pillow==13.0.0. Переменная LOCALFIND_PYTHON должна указывать на этот интерпретатор; иначе используется python из PATH. Для OCR отдельно нужны Tesseract 5.x и модели rus, eng, osd; пути задаются в настройках приложения.
+
+Контрольные суммы: SHA256SUMS.txt. Уведомления о сторонних лицензиях: third-party-notices.zip. Полные инструкции — в основном README репозитория.
