@@ -1,2 +1,2 @@
-60783beae49bfc68f980244ed82eb2f9180f7a74be70972a7fab3705c0db0347  localfind-0.1.0-preview.1-windows-x64-setup.exe
+9044195a2ac037ad5d37e478651704d040edc42f62b209528efe1e0778aac4ae  localfind-0.1.0-preview.1-windows-x64-setup.exe
 dadd06cc9e5cb52b353fac35c921a264004cfe3e62a01400455d5fcf3f0deec1  third-party-notices.zip
